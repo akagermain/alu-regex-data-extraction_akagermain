@@ -9,3 +9,11 @@ email_pattern = re.compile(
         r'(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+'
         r'\b'
 )
+
+alu_domain_rules = {
+        'official': re.compiler(r'@alueducation\.com$', re.IGNORECASE),
+        'alumni': re.compiler(r'@alumni\.alueducation\.com$', re.IGNORECASE),
+        'si': re.compiler(r'@si\.alueducation\.com$', re.IGNORECASE),
+}
+
+
