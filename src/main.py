@@ -17,6 +17,7 @@ alu_domain_rules = {
         'si': re.compiler(r'@si\.alueducation\.com$', re.IGNORECASE),
 }
 
+
 def classify_email(email: str) -> str:
     """Return which ALU category (if any) an email belongs to."""
     for belong, pattern in alu_domain_rules.items():
@@ -25,3 +26,11 @@ def classify_email(email: str) -> str:
     return 'external'
 
 
+def mask_email(email: str) ->str:
+    """Mask an email for safe display (eg; ju****@alueducation.com)."""
+    local, _, domain = email.partition('@')
+    if len(local) <= 2:
+        masked_local = local[0] + '*'
+    else:
+        masked_local = local[:2] + '*' * (len(local) - 2)
+    return f'{masked_local}@{domain}'
