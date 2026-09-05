@@ -42,13 +42,13 @@ on 04/13. My number is 250-788-999-000. Please refund to
 sara.k@alueducation.com as backup contact.
 
 Visit https://billing.example.com/invoice/889912?token=abc123XYZ for the
-invoice. FTP link (should be rejected as unsafe scheme): ftp://old.server.com/files 
+invoice. FTP link (should be rejected as unsafe scheme): ftp://old.server.com/files
 
 ----------------------------------------------------------------
 
 Ticket #102
 From: broken@@format@com
-Subject: n/a
+Subject: n/a 
 
 Text with injection-like content that must NOT br treated as valid data:
 "; rm -rf / # and <img src=x onerror=alert(1)>
