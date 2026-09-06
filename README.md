@@ -49,10 +49,10 @@ Covers international (`+250 788 123 456`), local dashed (`078-234-5678`), and pa
 alu-regex-data-extraction_akagermain/
 |-- input/
 |   '-- raw-text.txt        # sample input (valid + hostile/invalid cases)
-|-- src/
-|   '-- main.py             # Extraction, validation, and security logic
 |-- output/
-|   '-- sample-output.json  # Generated structured results  
+|   '-- sample-output.json  # Generated Structure results
+|-- src/
+|   '-- main.py             # Extraction, validation, and security logic  
 '-- README.md
 ```
 
