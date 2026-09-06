@@ -85,6 +85,11 @@ def extract_credit_cards(text: str):
     return results
 
 
+def mask_card(digits: str) -> str:
+    """Mask all except the last 4 digits, PCI-style."""
+    return '*' * (len(digits) - 4) + digits[-4:]
+
+
 
 #---------------------------------------------------------------
 # Temporary quick test block
