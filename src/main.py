@@ -64,7 +64,7 @@ def luhn_is_valid(digits: str) -> bool:
             if n > 9:
                 n -= 9
         total += n
-        return total % 10 == 0
+    return total % 10 == 0
 
 
 def find_card_candidate_spans(text: str):
@@ -104,7 +104,13 @@ if __name__ == '__main__':
     emails = email_pattern.findall(text)
     print(f"Found {len(emails)} email(s): ")
     for e in emails:
-        print(f" - {mask_emails(e)} [{classify_email(e)}]")
+        print(f" - {mask_email(e)} [{classify_email(e)}]")
+
+
+    cards = extract_credit_cards(text)
+    print(f"\nFound {len(cards)} valid credit card(s): ")
+    for c in cards:
+        print(f" - {mask_card(c)}")
 
 
 
