@@ -113,6 +113,35 @@ url_pattern = re.compile(
 
 
 #---------------------------------------------------------------
+# 4. PHONE NUMBER
+#---------------------------------------------------------------
+
+
+phone_pattern = re.compile(
+        r'(?:\+\d{1,3}[\s.-]?)?'           # optional country code
+        r'(?:\(\d{2,4}\)[\s.-]?)?'         # optional area code
+        r'\d{2,4}(?:[\s.-]\d{2,4}){1,4}'   # 2-5 digit group joined by separators
+)
+
+
+def extract_phone_numbers(text: str, card_spans) -> list:
+    
+    results = []
+    for match in phone_patter.finditer(text):
+        start, end =match.span()
+        if any(start < c_end and end > c_start for c_start, c_end in card_spans):
+            continue
+
+        raw = match.group().strip()
+        digit_count = len(re.sub(r'\D', '', raw))
+        if 7 <= digit_count <= 15:
+            results.append(raw)
+    return results
+
+
+
+
+#---------------------------------------------------------------
 # Temporary quick test block
 #---------------------------------------------------------------
 
