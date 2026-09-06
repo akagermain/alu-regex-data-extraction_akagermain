@@ -127,7 +127,7 @@ phone_pattern = re.compile(
 def extract_phone_numbers(text: str, card_spans) -> list:
     
     results = []
-    for match in phone_patter.finditer(text):
+    for match in phone_pattern.finditer(text):
         start, end =match.span()
         if any(start < c_end and end > c_start for c_start, c_end in card_spans):
             continue
@@ -138,6 +138,10 @@ def extract_phone_numbers(text: str, card_spans) -> list:
             results.append(raw)
     return results
 
+
+def mask_phone(phone: str) -> str:
+    digits_only = re.sub(r'\D', '', phone)
+    return '*' * max(len(digits_only) - 2, 0) + digits_only[-2:]
 
 
 
@@ -166,6 +170,12 @@ if __name__ == '__main__':
     print(f"\nFound {len(urls)} URL(s): ")
     for u in urls:
         print(f" - {u}")
+
+    card_spans = find_card_candidate_spans(text)
+    phones = extract_phone_numbers(text, card_spans)
+    print(f"\nFound {len(phones)} phone number(s): ")
+    for p in phones:
+        print(f" - {mask_phone(p)}")
 
 
 
