@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import re
+import json
+import os
 
 
 
@@ -172,46 +174,42 @@ def flag_hostile_lines(text: str):
 
 
 #---------------------------------------------------------------
-# Temporary quick test block
+# FILE EXTRACTION BLOCK
 #---------------------------------------------------------------
 
 
 
-if __name__ == '__main__':
-    with open('/home/germain/ALU/alu-regex-data-extraction_akagermain/input/raw-text.txt', 'r', encoding='utf-8') as file:
-        text = file.read()
+def extract_all(text: str) -> dict:
+    # Extract emails, then classify each against ALU rules.
+    raw_emails = email_pattern.findall(text)
+    emails = []
+    for e in raw_emails:
+        emails.append({
+            'value': e,
+            'category': classify_email(e),
+            'masked': mask_email(e),
+        })
 
-    emails = email_pattern.findall(text)
-    print(f"Found {len(emails)} email(s): ")
-    for e in emails:
-        print(f" - {mask_email(e)} [{classify_email(e)}]")
-
-
-    cards = extract_credit_cards(text)
-    print(f"\nFound {len(cards)} valid credit card(s): ")
-    for c in cards:
-        print(f" - {mask_card(c)}")
-
-    urls = url_pattern.findall(text)
-    print(f"\nFound {len(urls)} URL(s): ")
-    for u in urls:
-        print(f" - {u}")
-
+    # For credit cards, only luhn-valid numbers survive.
     card_spans = find_card_candidate_spans(text)
+    cards = extract_credit_cards(text)
+    cards_out = [{'value': c, 'masked': maske_card(c)} for c in cards]
+
+    # URLs: Only safe schemes are scanned.
+    urls = url_pattern.findall(text)
+
+    # Phone number part. Digit-count validated, excluding card-shaped spans
     phones = extract_phone_numbers(text, card_spans)
-    print(f"\nFound {len(phones)} phone number(s): ")
-    for p in phones:
-        print(f" - {mask_phone(p)}")
-
+    phones_out = [{'value': p, 'masked': mask_phones(p)} for p in phones]
     hostile = flag_hostile_lines(text)
-    print(f"\nFound {len(hostile)} security flag(s): ")
-    for flag in hostile:
-        print(f" - line {flag['line']}: {flag['reason']}")
 
-
-
-
-
+    return {
+        'emails': emails,
+        'credit_cards': cards_out,
+        'urls': urls,
+        'phone_numbers': phones_out,
+        'security_flags': hostile,
+    }
 
 
 
