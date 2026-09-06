@@ -10,7 +10,8 @@ import os
 # 1. EMAIl VALIDATION
 #---------------------------------------------------------------
 
-
+# Matches standard email formats while strictly preventing leading or 
+# trailing special characters
 
 email_pattern = re.compile(
         r'\b[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?'
@@ -51,7 +52,8 @@ def mask_email(email: str) ->str:
 # 2. CREDIT CARD NUMBER VALIDATION
 #---------------------------------------------------------------
 
-
+# Broad structural match for 13-19 digits; strict mathematical validation
+# is handled later by the Luhn algorithm.
 
 card_number_pattern = re.compile(r'\b(?:\d[ -]?){13,19}\b')
 
@@ -77,6 +79,8 @@ def find_card_candidate_spans(text: str):
 
 
 def extract_credit_cards(text: str):
+    """Extracts credit card numbers and verifies them against standard 
+    standard network lengths and the Luhn checksum"""
     results = []
     for match in card_number_pattern.finditer(text):
         raw = match.group()
@@ -98,10 +102,10 @@ def mask_card(digits: str) -> str:
 #---------------------------------------------------------------
 
 
-"""Only http/https are considered safe to extract. other schemes 
-(ftp://, file://, data:) are explicitly excluded from the pattern 
-itself - security by construction rather than a denylist filter 
-applied after the fact."""
+# Only http/https are considered safe to extract. other schemes 
+# (ftp://, file://, data:) are explicitly excluded from the pattern 
+# itself - security by construction rather than a denylist filter 
+# applied after the fact.
 
 
 url_pattern = re.compile(
@@ -118,6 +122,8 @@ url_pattern = re.compile(
 # 4. PHONE NUMBER
 #---------------------------------------------------------------
 
+# Captures various international formats; precise digit counts are 
+# validated downstream.
 
 phone_pattern = re.compile(
         r'(?:\+\d{1,3}[\s.-]?)?'           # optional country code
@@ -127,6 +133,8 @@ phone_pattern = re.compile(
 
 
 def extract_phone_numbers(text: str, card_spans) -> list:
+    """Extracts phone numbers, explicitly skipping text spans already
+    indentified as credit cards to prevent overlapping matches."""
     
     results = []
     for match in phone_pattern.finditer(text):
@@ -151,9 +159,9 @@ def mask_phone(phone: str) -> str:
 #---------------------------------------------------------------
 # SECURITY OR HOSTILE INPUT HANDLING
 #---------------------------------------------------------------
-"""Here, any injection-style content (script tags, SQL fragments, shell 
-commands) is scanned and flagged and get excluded from trusted extraction 
-results."""
+#Here, any injection-style content (script tags, SQL fragments, shell 
+#commands) is scanned and flagged and get excluded from trusted extraction 
+#results.
 
 hostile_patterns = [
         re.compile(r'<script.*?>.*?</script>', re.IGNORECASE | re.DOTALL),
@@ -180,6 +188,8 @@ def flag_hostile_lines(text: str):
 
 
 def extract_all(text: str) -> dict:
+    """Orchestrates the regex pattern, returning a structured dictionary
+    of validated and safely masked data"""
     # Extract emails, then classify each against ALU rules.
     raw_emails = email_pattern.findall(text)
     emails = []
@@ -243,6 +253,9 @@ def print_console_summary(results: dict) -> None:
 
 
 def main():
+    # Dynamically resolves paths relative to this script's location so it
+    # can be safely executed from any working directory.
+
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     input_path = os.path.join(base_dir, 'input', 'raw-text.txt')
     output_path = os.path.join(base_dir, 'output', 'sample-output.json')
