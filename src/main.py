@@ -12,6 +12,9 @@ import os
 
 # Matches standard email formats while strictly preventing leading or 
 # trailing special characters
+# 1. Local part: Starts or ends with an alphanumeric, allows (._%+-) in between
+# 2. Domain part: requires '@' followed by valid domain characters
+# 3. Top-level Domain: ensures at least one dot followed by a valid top-level domain (.com, .edu, .net, etc)
 
 email_pattern = re.compile(
         r'\b[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?'
@@ -123,7 +126,8 @@ url_pattern = re.compile(
 #---------------------------------------------------------------
 
 # Captures various international formats; precise digit counts are 
-# validated downstream.
+# validated downstream. It expects 2-5 digit groupings separated by spaces,
+# dots, or hyphens.
 
 phone_pattern = re.compile(
         r'(?:\+\d{1,3}[\s.-]?)?'           # optional country code
@@ -159,9 +163,12 @@ def mask_phone(phone: str) -> str:
 #---------------------------------------------------------------
 # SECURITY OR HOSTILE INPUT HANDLING
 #---------------------------------------------------------------
-#Here, any injection-style content (script tags, SQL fragments, shell 
-#commands) is scanned and flagged and get excluded from trusted extraction 
-#results.
+# A list of regex definition targeting common malicious payloads:
+# 1. Matches <scripts> tags for cross-site scripting (XSS)
+# 2. Matches inline HTML event handlers (e.g, onerror=, onloads=)
+# 3. Matches destructive SQL injection commands (DROP, DELETE, etc.).
+# 4. Matches SQL comment injection sequences (; --)
+# 5. Matches dangerous Unix shell commands (rm -rf)
 
 hostile_patterns = [
         re.compile(r'<script.*?>.*?</script>', re.IGNORECASE | re.DOTALL),
