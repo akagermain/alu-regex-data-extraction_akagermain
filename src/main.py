@@ -40,15 +40,6 @@ def mask_email(email: str) ->str:
     return f'{masked_local}@{domain}'
 
 
-if __name__ == '__main__':
-    with open('/home/germain/ALU/alu-regex-data-extraction_akagermain/input/raw-text.txt', 'r', encoding='utf-8') as file:
-        text = file.read()
-
-    emails = email_pattern.findall(text)
-    print(f"Found {len(emails)} email(s): ")
-    for e in emails:
-        print(f" - {mask_email(e)} [{classify_email(e)}]")
-
 
 #---------------------------------------------------------------
 # 2. CREDIT CARD NUMBER VALIDATION
@@ -68,5 +59,29 @@ def luhn_is_valid(digits: str) -> bool:
                 n -= 9
         total += n
         return total % 10 == 0
+
+
+def find_card_candidate_spans(text: str):
+    """All spans that structurally look like a card number, valid or not.
+    We will use this later to stop the phone extractor from re-claiming 
+    these digits."""
+    return [m.span() for m in card_number_pattern.finditer(text)]
+
+
+if __name__ == '__main__':
+    with open('/home/germain/ALU/alu-regex-data-extraction_akagermain/input/raw-text.txt', 'r', encoding='utf-8') as file:
+        text = file.read()
+
+    emails = email_pattern.findall(text)
+    print(f"Found {len(emails)} email(s): ")
+    for e in emails:
+        print(f" - {mask_emails(e)} [{classify_email(e)}]")
+
+
+
+
+
+
+
 
 
