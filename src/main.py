@@ -212,5 +212,32 @@ def extract_all(text: str) -> dict:
     }
 
 
+def print_console_summary(results: dict) -> None:
+    """This part prints a human readable summary using masked sensitive values only."""
+
+
+    print("=== Extraction Summary ===\n")
+    print(f"Emails found: {len(results['emails'])}")
+    for e in results['emails']:
+        print(f" - {e['masked']} [{e['category']}]")
+
+    print(f"\nCredit cards found: {len(results['credit_cards'])}")
+    for c in results['credit_cards']:
+        print(f" - {c['masked']}")
+
+    print(f"\nURLs found: {len(results['urls'])}")
+    for u in results['urls']:
+        print(f" - {u}")
+
+    print(f"\nPhone numbers found: {len(results['phone_numbers'])}")
+    for p in results['phone_numbers']:
+        print(f" - {p['masked']}")
+
+    print(f"\nSecurity flags found: {len(results['security_flags'])}")
+    for flag in result['security_flags']:
+        print(f" - line {flag['line']}: {flag['reason']}")
+
+    print("\n============================================================="
+
 
 
