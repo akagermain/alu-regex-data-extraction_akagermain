@@ -1,0 +1,88 @@
+{
+  "emails": [
+    {
+      "value": "j.uwimana@alueducation.com",
+      "category": "alu_official",
+      "masked": "j.*******@alueducation.com"
+    },
+    {
+      "value": "grace.mentor@alumni.alueducation.com",
+      "category": "alu_alumni",
+      "masked": "gr**********@alumni.alueducation.com"
+    },
+    {
+      "value": "peer.support@si.alueducation.com",
+      "category": "alu_si",
+      "masked": "pe**********@si.alueducation.com"
+    },
+    {
+      "value": "sara.k@gmail.com",
+      "category": "external",
+      "masked": "sa****@gmail.com"
+    },
+    {
+      "value": "sara.k@alueducation.com",
+      "category": "alu_official",
+      "masked": "sa****@alueducation.com"
+    }
+  ],
+  "credit_cards": [
+    {
+      "value": "4539148803436467",
+      "masked": "4539********6467"
+    },
+    {
+      "value": "6011000990139424",
+      "masked": "6011********9424"
+    },
+    {
+      "value": "378282246310005",
+      "masked": "3782*******0005"
+    }
+  ],
+  "urls": [
+    "https://www.example.com/products/item?id=4521&ref=support",
+    "http://support.example.org/kb/checkout-errors",
+    "https://billing.example.com/invoices/889912?token=abc123XYZ"
+  ],
+  "phone_numbers": [
+    {
+      "value": "+250 788 123 456",
+      "masked": "250******456"
+    },
+    {
+      "value": "0788-234-567",
+      "masked": "078****567"
+    },
+    {
+      "value": "+1 (415) 555-0199",
+      "masked": "141*****199"
+    },
+    {
+      "value": "+44 20 7946 0958",
+      "masked": "442******958"
+    },
+    {
+      "value": "250-788-999-000",
+      "masked": "250******000"
+    },
+    {
+      "value": "4111 1111",
+      "masked": "411**111"
+    }
+  ],
+  "security_flags": [
+    {
+      "line": 25,
+      "reason": "suspicious pattern detected"
+    },
+    {
+      "line": 27,
+      "reason": "suspicious pattern detected"
+    },
+    {
+      "line": 54,
+      "reason": "suspicious pattern detected"
+    }
+  ]
+}
