@@ -193,14 +193,14 @@ def extract_all(text: str) -> dict:
     # For credit cards, only luhn-valid numbers survive.
     card_spans = find_card_candidate_spans(text)
     cards = extract_credit_cards(text)
-    cards_out = [{'value': c, 'masked': maske_card(c)} for c in cards]
+    cards_out = [{'value': c, 'masked': mask_card(c)} for c in cards]
 
     # URLs: Only safe schemes are scanned.
     urls = url_pattern.findall(text)
 
     # Phone number part. Digit-count validated, excluding card-shaped spans
     phones = extract_phone_numbers(text, card_spans)
-    phones_out = [{'value': p, 'masked': mask_phones(p)} for p in phones]
+    phones_out = [{'value': p, 'masked': mask_phone(p)} for p in phones]
     hostile = flag_hostile_lines(text)
 
     return {
@@ -234,17 +234,17 @@ def print_console_summary(results: dict) -> None:
         print(f" - {p['masked']}")
 
     print(f"\nSecurity flags found: {len(results['security_flags'])}")
-    for flag in result['security_flags']:
+    for flag in results['security_flags']:
         print(f" - line {flag['line']}: {flag['reason']}")
 
-    print("\n============================================================="
+    print("\n=============================================================")
 
 
 
 
 def main():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    input_path = os.path.join(base_dir, 'input', 'raw_text.txt')
+    input_path = os.path.join(base_dir, 'input', 'raw-text.txt')
     output_path = os.path.join(base_dir, 'output', 'sample-output.json')
 
     with open(input_path, 'r', encoding='utf-8') as f:
