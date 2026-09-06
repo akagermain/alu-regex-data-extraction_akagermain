@@ -45,7 +45,7 @@ Covers international (`+250 788 123 456`), local dashed (`078-234-5678`), and pa
 
 ## Repository structure
 
-`
+```
 alu-regex-data-extraction_akagermain/
 |-- input/
 |   '-- raw-text.txt        # sample input (valid + hostile/invalid cases)
@@ -54,5 +54,5 @@ alu-regex-data-extraction_akagermain/
 |-- output/
 |   '-- sample-output.json  # Generated structured results  
 '-- README.md
-`
+```
 
