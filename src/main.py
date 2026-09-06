@@ -147,6 +147,31 @@ def mask_phone(phone: str) -> str:
 
 
 #---------------------------------------------------------------
+# SECURITY OR HOSTILE INPUT HANDLING
+#---------------------------------------------------------------
+"""Here, any injection-style content (script tags, SQL fragments, shell 
+commands) is scanned and flagged and get excluded from trusted extraction 
+results."""
+
+hostile_patterns = [
+        re.compile(r'<script.*?>.*?</script>', re.IGNORECASE | re.DOTALL),
+        re.compile(r'<[^>]+on\w+\s*=', re.IGNORECASE),
+        re.compile(r';\s*(DROP|DELETE|INSERT|UPDATE)\s+TABLE', re.IGNORECASE),
+        re.compile(r';\s*--', re.MULTILINE),
+        re.compile(r'rm\s+-rf')
+]
+
+def flag_hostile_lines(text: str):
+    hostile_found = []
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        for pattern in hostile_patterns:
+            if pattern.search(line):
+                hostile_found.append({'line': line_no, 'reason': 'suspicious pattern detected'})
+                break
+    return hostile_found
+
+
+#---------------------------------------------------------------
 # Temporary quick test block
 #---------------------------------------------------------------
 
@@ -177,6 +202,11 @@ if __name__ == '__main__':
     print(f"\nFound {len(phones)} phone number(s): ")
     for p in phones:
         print(f" - {mask_phone(p)}")
+
+    hostile = flag_hostile_lines(text)
+    print(f"\nFound {len(hostile)} security flag(s): ")
+    for flag in hostile:
+        print(f" - line {flag['line']}: {flag['reason']}")
 
 
 
