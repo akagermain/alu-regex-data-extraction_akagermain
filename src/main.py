@@ -241,3 +241,26 @@ def print_console_summary(results: dict) -> None:
 
 
 
+
+def main():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    input_path = os.path.join(base_dir, 'input', 'raw_text.txt')
+    output_path = os.path.join(base_dir, 'output', 'sample-output.json')
+
+    with open(input_path, 'r', encoding='utf-8') as f:
+          text = f.read()
+    results = extract_all(text)
+    
+    # Full (unmasked) data goes to the json file only for this step:
+    with open(output_path, 'w', encoding='utf-8') as f:
+          json.dump(results, f, indent=2)
+
+    # Console output uses masked values to avoid exposing sensitive data in logs or terminal history.
+    print_console_summary(results)
+    print(f"\nFull structured results written to: {output_path}")
+
+
+
+if __name__ == '__main__':
+    main()
+
