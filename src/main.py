@@ -2,9 +2,13 @@
 
 import re
 
+
+
 #---------------------------------------------------------------
 # 1. EMAIl VALIDATION
 #---------------------------------------------------------------
+
+
 
 email_pattern = re.compile(
         r'\b[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?'
@@ -45,6 +49,8 @@ def mask_email(email: str) ->str:
 # 2. CREDIT CARD NUMBER VALIDATION
 #---------------------------------------------------------------
 
+
+
 card_number_pattern = re.compile(r'\b(?:\d[ -]?){13,19}\b')
 
 def luhn_is_valid(digits: str) -> bool:
@@ -66,6 +72,24 @@ def find_card_candidate_spans(text: str):
     We will use this later to stop the phone extractor from re-claiming 
     these digits."""
     return [m.span() for m in card_number_pattern.finditer(text)]
+
+
+def extract_credit_cards(text: str):
+    results = []
+    for match in card_number_pattern.finditer(text):
+        raw = match.group()
+        digits = re.sub(r'[ -]', '', raw)
+        # Valid card lengths: Visa/MasterCard/Discover = 16, Amex = 15, some = 13/19
+        if len(digits) in (13, 15, 16, 19) and luhn_is_valid(digits):
+            results.append(digits)
+    return results
+
+
+
+#---------------------------------------------------------------
+# Temporary quick test block
+#---------------------------------------------------------------
+
 
 
 if __name__ == '__main__':
