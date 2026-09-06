@@ -41,7 +41,7 @@ I was charged twice, card 3782 822463 10005 was billedon 04/12 and again
 on 04/13. My number is 250-788-999-000. Please refund to 
 sara.k@alueducation.com as backup contact.
 
-Visit https://billing.example.com/invoice/889912?token=abc123XYZ for the
+Visit https://billing.example.com/invoices/889912?token=abc123XYZ for the
 invoice. FTP link (should be rejected as unsafe scheme): ftp://old.server.com/files
 
 ----------------------------------------------------------------
