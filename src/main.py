@@ -92,6 +92,27 @@ def mask_card(digits: str) -> str:
 
 
 #---------------------------------------------------------------
+# 3. URLs
+#---------------------------------------------------------------
+
+
+"""Only http/https are considered safe to extract. other schemes 
+(ftp://, file://, data:) are explicitly excluded from the pattern 
+itself - security by construction rather than a denylist filter 
+applied after the fact."""
+
+
+url_pattern = re.compile(
+        r'\bhttps?://'              # required safe scheme
+        r'[a-zA-Z0-9.-]+'           # domain
+        r'(?:\.[a-zA-Z]{2,})'       # Top level domain
+        r'(?::\d+)?'                # optional port
+        r'(?:/[^\s<>"\']*)?'        # optional path/query, stop at whitespace/quotes
+)
+
+
+
+#---------------------------------------------------------------
 # Temporary quick test block
 #---------------------------------------------------------------
 
@@ -111,6 +132,11 @@ if __name__ == '__main__':
     print(f"\nFound {len(cards)} valid credit card(s): ")
     for c in cards:
         print(f" - {mask_card(c)}")
+
+    urls = url_pattern.findall(text)
+    print(f"\nFound {len(urls)} URL(s): ")
+    for u in urls:
+        print(f" - {u}")
 
 
 
