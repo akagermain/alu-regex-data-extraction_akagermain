@@ -48,3 +48,25 @@ if __name__ == '__main__':
     print(f"Found {len(emails)} email(s): ")
     for e in emails:
         print(f" - {mask_email(e)} [{classify_email(e)}]")
+
+
+#---------------------------------------------------------------
+# 2. CREDIT CARD NUMBER VALIDATION
+#---------------------------------------------------------------
+
+card_number_pattern = re.compile(r'\b(?:\d[ -]?){13,19}\b')
+
+def luhn_is_valid(digits: str) -> bool:
+    """Standard Luhn checksum used by all major card networks."""
+    total = 0
+    reverse_digits = digits[::-1]
+    for i, ch in enumerate(reverse_digits):
+        n = int(ch)
+        if i % 2 == 1:
+            n *= 2
+            if n > 9:
+                n -= 9
+        total += n
+        return total % 10 == 0
+
+
