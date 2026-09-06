@@ -2,6 +2,10 @@
 
 import re
 
+#---------------------------------------------------------------
+# 1. EMAIl VALIDATION
+#---------------------------------------------------------------
+
 email_pattern = re.compile(
         r'\b[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?'
         r'@'
@@ -12,9 +16,9 @@ email_pattern = re.compile(
 
 # ALU specific domains that require extra validation:
 alu_domain_rules = {
-        'official': re.compiler(r'@alueducation\.com$', re.IGNORECASE),
-        'alumni': re.compiler(r'@alumni\.alueducation\.com$', re.IGNORECASE),
-        'si': re.compiler(r'@si\.alueducation\.com$', re.IGNORECASE),
+        'official': re.compile(r'@alueducation\.com$', re.IGNORECASE),
+        'alumni': re.compile(r'@alumni\.alueducation\.com$', re.IGNORECASE),
+        'si': re.compile(r'@si\.alueducation\.com$', re.IGNORECASE),
 }
 
 
@@ -34,3 +38,13 @@ def mask_email(email: str) ->str:
     else:
         masked_local = local[:2] + '*' * (len(local) - 2)
     return f'{masked_local}@{domain}'
+
+
+if __name__ == '__main__':
+    with open('/home/germain/ALU/alu-regex-data-extraction_akagermain/input/raw-text.txt', 'r', encoding='utf-8') as file:
+        text = file.read()
+
+    emails = email_pattern.findall(text)
+    print(f"Found {len(emails)} email(s): ")
+    for e in emails:
+        print(f" - {mask_email(e)} [{classify_email(e)}]")
