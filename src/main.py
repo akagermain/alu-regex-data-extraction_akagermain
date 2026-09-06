@@ -87,7 +87,7 @@ def extract_credit_cards(text: str):
 
 def mask_card(digits: str) -> str:
     """Mask all except the last 4 digits, PCI-style."""
-    return '*' * (len(digits) - 4) + digits[-4:]
+    return digits[:4] + '*' * (len(digits) - 8) + digits[-4:]
 
 
 
@@ -141,7 +141,8 @@ def extract_phone_numbers(text: str, card_spans) -> list:
 
 def mask_phone(phone: str) -> str:
     digits_only = re.sub(r'\D', '', phone)
-    return '*' * max(len(digits_only) - 2, 0) + digits_only[-2:]
+    middle_len = max(len(digits_only) - 6, 0)
+    return digits_only[:3] + '*' * middle_len + digits_only[-3:]
 
 
 
